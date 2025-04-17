@@ -89,15 +89,18 @@ const AdminDashboard = () => {
 
   return (
     <div className="container">
-      <h2>داشبورد مدیریت ترجمه‌ها</h2>
+      <h2 style={{ display: "flex", justifyContent: "center" }}>
+        داشبورد مدیریت ترجمه‌ها
+      </h2>
 
       <div className="input-wrapper">
         <input
+          style={{ direction: "rtl" }}
           value={newKeyword}
           onChange={(e) => setNewKeyword(e.target.value)}
-          placeholder="کلید جدید را وارد کنید (مثلاً: apple)"
+          placeholder="کلمه جدید را وارد کنید (مثلاً: apple)"
         />
-        <button onClick={handleAddKeyword}>افزودن کلید</button>
+        <button onClick={handleAddKeyword}>افزودن کلمه</button>
       </div>
 
       {errorMessage && (
