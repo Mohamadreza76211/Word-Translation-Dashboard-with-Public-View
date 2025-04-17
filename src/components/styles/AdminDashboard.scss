@@ -1,0 +1,108 @@
+$primary-color: #4caf50;
+$hover-color: #45a049;
+$edit-btn-color: #1976d2;
+$delete-btn-color: #d32f2f;
+$confirm-btn-color: #388e3c;
+$focus-color: #f1f1f1;
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+h2 {
+  margin-bottom: 16px;
+}
+
+.input-wrapper {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+
+  input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    flex: 1;
+  }
+
+  button {
+    padding: 8px 16px;
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $hover-color;
+    }
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #e0e0e0;
+  }
+
+  td {
+    background-color: #fff;
+  }
+
+  td span {
+    color: red;
+  }
+}
+
+button.edit-btn {
+  background-color: $edit-btn-color;
+  color: white;
+
+  &:hover {
+    background-color: darken($edit-btn-color, 10%);
+  }
+}
+
+button.delete-btn {
+  background-color: $delete-btn-color;
+  color: white;
+
+  &:hover {
+    background-color: darken($delete-btn-color, 10%);
+  }
+}
+
+button.confirm-btn {
+  background-color: $confirm-btn-color;
+  color: white;
+
+  &:hover {
+    background-color: darken($confirm-btn-color, 10%);
+  }
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  margin-right: 8px;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    background-color: $focus-color;
+  }
+}
+tr {
+  cursor: grab;
+}
