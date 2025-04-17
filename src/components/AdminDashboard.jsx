@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { FaTrash, FaEdit, FaCheck } from "react-icons/fa";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import "./styles/AdminDashboard.scss";
 
 const supportedLanguages = ["fa", "en", "de"];
@@ -68,17 +67,6 @@ const AdminDashboard = () => {
     setData(newData);
   };
 
-  const handleDragEnd = (result) => {
-    if (!result.destination) return;
-
-    const reorderedData = Array.from(data);
-    const [movedItem] = reorderedData.splice(result.source.index, 1);
-    reorderedData.splice(result.destination.index, 0, movedItem);
-
-    setData(reorderedData);
-    localStorage.setItem("translationsData", JSON.stringify(reorderedData));
-  };
-
   return (
     <div className="container">
       <h2>داشبورد مدیریت ترجمه‌ها</h2>
@@ -92,94 +80,68 @@ const AdminDashboard = () => {
         <button onClick={handleAddKeyword}>افزودن کلید</button>
       </div>
 
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="keywords">
-          {(provided) => (
-            <table {...provided.droppableProps} ref={provided.innerRef}>
-              <thead>
-                <tr>
-                  <th>کلمه</th>
-                  {supportedLanguages.map((lang) => (
-                    <th key={lang}>ترجمه ({lang})</th>
-                  ))}
-                  <th>عملیات</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map(({ key, translations }, index) => (
-                  <Draggable key={key} draggableId={key} index={index}>
-                    {(provided) => (
-                      <tr
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={{
-                          ...provided.draggableProps.style,
-                          backgroundColor: "#f9f9f9",
-                          cursor: "grab",
-                        }}
-                      >
-                        <td>{key}</td>
-                        {supportedLanguages.map((lang) => (
-                          <td key={lang}>
-                            {isEditing[`${key}_${lang}`] ? (
-                              <input
-                                value={translations[lang] || ""}
-                                placeholder={`مثلاً: apple (${lang})`}
-                                onChange={(e) =>
-                                  handleTranslationChangeMulti(
-                                    key,
-                                    lang,
-                                    e.target.value
-                                  )
-                                }
-                              />
-                            ) : (
-                              translations[lang] || (
-                                <span>ترجمه موجود نیست</span>
-                              )
-                            )}
-                          </td>
-                        ))}
-                        <td>
-                          {supportedLanguages.some(
-                            (lang) => isEditing[`${key}_${lang}`]
-                          ) ? (
-                            <button
-                              onClick={() => handleConfirmClickMulti(key)}
-                              className="confirm-btn"
-                            >
-                              <FaCheck /> تایید
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() =>
-                                supportedLanguages.forEach((lang) =>
-                                  handleEditClick(key, lang)
-                                )
-                              }
-                              className="edit-btn"
-                            >
-                              <FaEdit /> ویرایش
-                            </button>
-                          )}
-                          <button
-                            onClick={() => handleDeleteKeyword(key)}
-                            className="delete-btn"
-                          >
-                            <FaTrash /> حذف
-                          </button>
-                        </td>
-                      </tr>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </tbody>
-            </table>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <table>
+        <thead>
+          <tr>
+            <th>کلمه</th>
+            {supportedLanguages.map((lang) => (
+              <th key={lang}>ترجمه ({lang})</th>
+            ))}
+            <th>عملیات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map(({ key, translations }) => (
+            <tr key={key} style={{ backgroundColor: "#f9f9f9" }}>
+              <td>{key}</td>
+              {supportedLanguages.map((lang) => (
+                <td key={lang}>
+                  {isEditing[`${key}_${lang}`] ? (
+                    <input
+                      value={translations[lang] || ""}
+                      placeholder={`مثلاً: apple (${lang})`}
+                      onChange={(e) =>
+                        handleTranslationChangeMulti(key, lang, e.target.value)
+                      }
+                    />
+                  ) : (
+                    translations[lang] || <span>ترجمه موجود نیست</span>
+                  )}
+                </td>
+              ))}
+              <td>
+                {supportedLanguages.some(
+                  (lang) => isEditing[`${key}_${lang}`]
+                ) ? (
+                  <button
+                    onClick={() => handleConfirmClickMulti(key)}
+                    className="confirm-btn"
+                  >
+                    <FaCheck /> تایید
+                  </button>
+                ) : (
+                  <button
+                    onClick={() =>
+                      supportedLanguages.forEach((lang) =>
+                        handleEditClick(key, lang)
+                      )
+                    }
+                    className="edit-btn"
+                  >
+                    <FaEdit /> ویرایش
+                  </button>
+                )}
+                <button
+                  onClick={() => handleDeleteKeyword(key)}
+                  className="delete-btn"
+                >
+                  <FaTrash /> حذف
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
