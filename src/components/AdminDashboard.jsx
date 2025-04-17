@@ -16,6 +16,7 @@ const AdminDashboard = () => {
   const [isEditing, setIsEditing] = useState({});
 
   const handleAddKeyword = () => {
+    if (!newKeyword.trim()) return;
     addKeyword(newKeyword);
     setNewKeyword("");
   };
