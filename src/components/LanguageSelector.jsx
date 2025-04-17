@@ -1,16 +1,19 @@
 import React from "react";
+import { useTranslations } from "../context/TranslationContext";
 
-const LanguageSelector = ({ selectedLang, onChange }) => {
-  const supportedLanguages = ["fa", "en", "de"];
+const LanguageSelector = () => {
+  const { selectedLang, setSelectedLang, supportedLanguages } =
+    useTranslations();
 
   return (
     <select
       value={selectedLang}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(e) => setSelectedLang(e.target.value)}
       style={{
         padding: "8px",
         borderRadius: "6px",
         border: "1px solid #ccc",
+        marginBottom: "20px",
       }}
     >
       {supportedLanguages.map((lang) => (

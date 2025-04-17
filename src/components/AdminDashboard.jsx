@@ -1,42 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaTrash, FaEdit, FaCheck } from "react-icons/fa";
+import { useTranslations } from "../context/TranslationContext";
 import "./styles/AdminDashboard.scss";
 
-const supportedLanguages = ["fa", "en", "de"];
-
 const AdminDashboard = () => {
-  const [data, setData] = useState([]);
+  const {
+    data,
+    supportedLanguages,
+    addKeyword,
+    deleteKeyword,
+    updateTranslation,
+  } = useTranslations();
+
   const [newKeyword, setNewKeyword] = useState("");
   const [isEditing, setIsEditing] = useState({});
 
-  useEffect(() => {
-    const storedData = localStorage.getItem("translationsData");
-    if (storedData) {
-      setData(JSON.parse(storedData));
-    }
-  }, []);
-
   const handleAddKeyword = () => {
-    if (!newKeyword.trim()) return;
-    if (data.some((item) => item.key === newKeyword.trim())) {
-      alert("این کلید از قبل وجود دارد.");
-      return;
-    }
-
-    const newEntry = {
-      key: newKeyword.trim(),
-      translations: {},
-    };
-    const newData = [...data, newEntry];
-    setData(newData);
+    addKeyword(newKeyword);
     setNewKeyword("");
-    localStorage.setItem("translationsData", JSON.stringify(newData));
-  };
-
-  const handleDeleteKeyword = (key) => {
-    const updatedData = data.filter((item) => item.key !== key);
-    setData(updatedData);
-    localStorage.setItem("translationsData", JSON.stringify(updatedData));
   };
 
   const handleEditClick = (key, lang) => {
@@ -49,22 +30,10 @@ const AdminDashboard = () => {
       updatedEditing[`${key}_${lang}`] = false;
     });
     setIsEditing((prev) => ({ ...prev, ...updatedEditing }));
-    localStorage.setItem("translationsData", JSON.stringify(data));
   };
 
   const handleTranslationChangeMulti = (key, lang, value) => {
-    const newData = data.map((item) =>
-      item.key === key
-        ? {
-            ...item,
-            translations: {
-              ...item.translations,
-              [lang]: value,
-            },
-          }
-        : item
-    );
-    setData(newData);
+    updateTranslation(key, lang, value);
   };
 
   return (
@@ -132,7 +101,7 @@ const AdminDashboard = () => {
                   </button>
                 )}
                 <button
-                  onClick={() => handleDeleteKeyword(key)}
+                  onClick={() => deleteKeyword(key)}
                   className="delete-btn"
                 >
                   <FaTrash /> حذف

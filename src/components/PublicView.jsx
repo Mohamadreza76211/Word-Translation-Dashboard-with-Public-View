@@ -1,22 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useTranslations } from "../context/TranslationContext";
 
-const PublicView = ({ selectedLang }) => {
-  const [translationsData, setTranslationsData] = useState([]);
-
-  useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem("translationsData"));
-    if (storedData) {
-      setTranslationsData(storedData);
-    } else {
-      setTranslationsData([]);
-    }
-  }, []);
+const PublicView = () => {
+  const { data, selectedLang } = useTranslations();
 
   return (
     <div style={{ maxWidth: 500, margin: "0 auto", padding: "24px" }}>
       <h2 style={{ marginBottom: "16px" }}>🌐 ترجمه‌ها</h2>
 
-      {translationsData.map(({ key, translations }) => (
+      {data.map(({ key, translations }) => (
         <div
           key={key}
           style={{
