@@ -12,8 +12,7 @@ const LanguageSelector = () => {
       style={{
         padding: "8px",
         borderRadius: "6px",
-        border: "1px solid #ccc",
-        marginBottom: "20px",
+        marginBottom: "16px",
       }}
     >
       {supportedLanguages.map((lang) => (

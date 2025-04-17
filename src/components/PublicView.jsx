@@ -12,16 +12,15 @@ const PublicView = () => {
         <div
           key={key}
           style={{
-            backgroundColor: "#ffffff",
-            border: "1px solid #e0e0e0",
+            backgroundColor: "#fff",
+            border: "1px solid #ddd",
             borderRadius: "10px",
             padding: "12px 16px",
             marginBottom: "12px",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
           }}
         >
-          <div style={{ fontWeight: "bold", fontSize: "16px" }}>{key}</div>
-          <div style={{ marginTop: "6px", color: "#333" }}>
+          <strong>{key}</strong>
+          <div>
             {translations[selectedLang] || (
               <span style={{ color: "red" }}>ترجمه موجود نیست</span>
             )}

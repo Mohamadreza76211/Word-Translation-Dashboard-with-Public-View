@@ -1,0 +1,40 @@
+.alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #f44336;
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  z-index: 9999;
+  max-width: 300px;
+  font-size: 16px;
+}
+
+.alert.success {
+  background-color: #4caf50;
+}
+
+.alert.warning {
+  background-color: #ff9800;
+}
+
+.alert-message {
+  flex-grow: 1;
+}
+
+.alert-close {
+  margin-left: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.alert-close:hover {
+  color: #ddd;
+}

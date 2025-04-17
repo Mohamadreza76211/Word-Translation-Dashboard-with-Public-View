@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaTrash, FaEdit, FaCheck } from "react-icons/fa";
 import { useTranslations } from "../context/TranslationContext";
+import Alert from "./Alert";
 import "./styles/AdminDashboard.scss";
 
 const AdminDashboard = () => {
@@ -10,15 +11,44 @@ const AdminDashboard = () => {
     addKeyword,
     deleteKeyword,
     updateTranslation,
+    moveKeyword,
   } = useTranslations();
 
   const [newKeyword, setNewKeyword] = useState("");
   const [isEditing, setIsEditing] = useState({});
+  const [draggedItem, setDraggedItem] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
 
   const handleAddKeyword = () => {
-    if (!newKeyword.trim()) return;
+    if (!newKeyword.trim()) {
+      setErrorMessage("لطفاً ابتدا کلمه را وارد کنید!");
+      setAlertType("warning");
+      setTimeout(() => {
+        setErrorMessage("");
+        setAlertType("");
+      }, 2000);
+      return;
+    }
+
+    if (data.some((item) => item.key === newKeyword.trim())) {
+      setErrorMessage("کلمه وارد شده تکراری است!");
+      setAlertType("warning");
+      setTimeout(() => {
+        setErrorMessage("");
+        setAlertType("");
+      }, 2000);
+      return;
+    }
+
     addKeyword(newKeyword);
     setNewKeyword("");
+    setErrorMessage("با موفقیت اضافه شد!");
+    setAlertType("success");
+    setTimeout(() => {
+      setErrorMessage("");
+      setAlertType("");
+    }, 2000);
   };
 
   const handleEditClick = (key, lang) => {
@@ -37,6 +67,26 @@ const AdminDashboard = () => {
     updateTranslation(key, lang, value);
   };
 
+  const handleDragStart = (key) => {
+    setDraggedItem(key);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (targetKey) => {
+    if (draggedItem && draggedItem !== targetKey) {
+      moveKeyword(draggedItem, targetKey);
+    }
+    setDraggedItem(null);
+  };
+
+  const handleCloseAlert = () => {
+    setErrorMessage("");
+    setAlertType("");
+  };
+
   return (
     <div className="container">
       <h2>داشبورد مدیریت ترجمه‌ها</h2>
@@ -50,6 +100,14 @@ const AdminDashboard = () => {
         <button onClick={handleAddKeyword}>افزودن کلید</button>
       </div>
 
+      {errorMessage && (
+        <Alert
+          message={errorMessage}
+          type={alertType}
+          onClose={handleCloseAlert}
+        />
+      )}
+
       <table>
         <thead>
           <tr>
@@ -62,7 +120,14 @@ const AdminDashboard = () => {
         </thead>
         <tbody>
           {data.map(({ key, translations }) => (
-            <tr key={key} style={{ backgroundColor: "#f9f9f9" }}>
+            <tr
+              key={key}
+              style={{ backgroundColor: "#f9f9f9" }}
+              draggable
+              onDragStart={() => handleDragStart(key)}
+              onDragOver={handleDragOver}
+              onDrop={() => handleDrop(key)}
+            >
               <td>{key}</td>
               {supportedLanguages.map((lang) => (
                 <td key={lang}>
